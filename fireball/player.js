@@ -103,7 +103,10 @@ class Player {
 
 	touchingShot() {
 		for (let shot of shots) {
-			if (shot.touchingPlayer()) return true;
+			if (shot.touchingPlayer()) {
+				camera.shake(10, 4);
+				return true;
+			}
 		}
 		return false
 	}
