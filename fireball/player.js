@@ -10,7 +10,7 @@ class Player {
 
 		this.thrust = 6;
 		this.moving = false;
-		this.dash = 25;
+		this.dash = 35;
 		this.dash_vec = createVector();
 		this.dash_time = 5;
 		this.dash_count = this.dash_time;
@@ -29,6 +29,7 @@ class Player {
 			noStroke();
 			rectMode(CENTER);
 			rect(0, 0, 2*xr, 2*yr);
+			got_shot_sound.play();
 		}
 
 		if (this.health <= 0.91 && this.health > 0.09) {
@@ -73,7 +74,8 @@ class Player {
 
 		// dash when you click
 		if (mouseIsPressed && this.dash_ready==true && !this.dash_running && this.dash_recharge<0) {
-			let m = createVector(-(width/2-mouseX), -(height/2-mouseY));
+			let cam_to_player = this.loc.copy().sub(camera.loc);
+			let m = createVector(-(width/2-mouseX), -(height/2-mouseY)).sub(cam_to_player);
 			let ang = m.heading();
 			this.dash_vec = p5.Vector.fromAngle(ang, this.dash);
 			this.dash_count = this.dash_time;

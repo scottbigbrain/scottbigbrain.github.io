@@ -33,7 +33,7 @@ class Shot {
 	}
 
 	draw() {
-		fill(15, 21, 51);
+		fill(5, 11, 41);
 		noStroke();
 		circle(this.loc.x, this.loc.y, this.size);
 	}

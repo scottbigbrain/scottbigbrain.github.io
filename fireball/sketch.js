@@ -1,8 +1,8 @@
 // Game for the GMTK Game Jam 2021. Author: Elijah Buchanan
 
 let scaling = 1;
-let xr = 800;
-let yr = 600;
+let xr = 1000;
+let yr = 800;
 let wallr = 15;
 let wall_bounce = 0.6;
 let game_started = false;
@@ -19,11 +19,16 @@ let drops = [];
 
 let d_emitter;
 
-let hit_sound, dash_sound;
+let hit_sound, dash_sound, got_shot_sound;
+let music;
 
 function preload() {
 	hit_sound = loadSound('assets/hit.wav');
 	dash_sound = loadSound('assets/dash.wav');
+	dash_sound.setVolume(1.7);
+	got_shot_sound = loadSound('assets/got_shot.wav');
+	music = loadSound('assets/bensound-epic.mp3');
+	music.setVolume(0.1);
 }
 
 
@@ -39,6 +44,8 @@ function setup() {
 		monsters.push(new Monster());
 	}
 	d_emitter = new Emitter(0,0);
+
+	music.loop();
 }
 
 function draw() {
@@ -47,20 +54,16 @@ function draw() {
 	scale(scaling);
 
 	if (game_started) {
-
-	ball.update();
-	for (let monster of monsters) {
-		monster.update();
+		ball.update();
+		for (let monster of monsters) {
+			monster.update();
+		}
+		for (let shot of shots) {
+			shot.update();
+		}
+		player.update();
+		d_emitter.update();
 	}
-	for (let shot of shots) {
-		shot.update();
-	}
-	player.update();
-	camera.update();
-	d_emitter.update();
-
-	}
-
 
 	ball.draw();
 	player.draw();
@@ -86,6 +89,7 @@ function draw() {
 	line( xr,  yr, -xr,  yr);
 	line(-xr,  yr, -xr, -yr);
 
+	// --------------- Score and Health --------------
 	rectMode(CENTER);
 	fill(50, 160, 60);
 	noStroke();
@@ -101,7 +105,7 @@ function draw() {
 	textSize(32);
 	textAlign(LEFT, TOP);
 	text("Score: "+score, camera.loc.x-width/2+40, camera.loc.y-height/2+40);
-
+	// ------------------------------------------------
 
 	if (!game_started) {
 		fill(220, 230, 255);
@@ -112,8 +116,6 @@ function draw() {
 		text("Press any key to start game", camera.loc.x, camera.loc.y);
 		game_started = keyIsPressed;
 	}
-
-
 
 	// kill monsters touched by the ball and add up the score and drop packs
 	let dead = monsters.filter(m => m.touchingBall());
@@ -134,7 +136,7 @@ function draw() {
 	// remove expired drops
 	drops = drops.filter(d => d.lifetime > 0);
 
-	let chance = map(monsters.length, 0, 40, 0.015, 0);
+	let chance = ( map(monsters.length, 0, 40, 0.015, 0) + map(max(score, 255), 0, 255, 0, 0, 0.025) ) * (monsters.length <= 45);
 	if (random() < chance && monsters.length < 40 && game_started) monsters.push(new Monster());
 
 	if (player.health < 0.1) {
@@ -147,9 +149,10 @@ function draw() {
 		textSize(24);
 		text("Press r to restart", camera.loc.x, camera.loc.y+36);
 
-		if (keyIsDown(82)) setTimeout(() => {  initGame(); }, 1500);
+		if (keyIsDown(82)) initGame();
 	}
 
+	camera.update();
 }
 
 
@@ -164,8 +167,8 @@ function doDrops(dead) {
 function doDeaths(dead) {
 	for (let d of dead) {
 		d_emitter.position = d.loc.copy();
-		d_emitter.emit(random(5, 15));
-		ball.p_system.emit(random(3,12))
+		d_emitter.emit(random(8,20), 6);
+		ball.p_system.emit(random(3,12), 2);
 	}
 }
 
@@ -180,7 +183,7 @@ function initGame() {
 	camera = new Camera();
 	ball = new Ball();
 
-	for (let i = 0; i < 10; i++) {
+	for (let i = 0; i < 3; i++) {
 		monsters.push(new Monster());
 	}
 }

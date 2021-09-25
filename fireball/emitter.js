@@ -11,9 +11,9 @@ class Emitter {
     this.particles = [];
   }
 
-  emit(num) {
+  emit(num, vel=1) {
     for (let i = 0; i < num; i++) {
-      this.particles.push(new Particle(this.position.x, this.position.y));
+      this.particles.push(new Particle(this.position.x, this.position.y, vel));
     }
   }
 

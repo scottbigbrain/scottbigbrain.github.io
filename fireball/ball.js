@@ -32,7 +32,7 @@ class Ball {
 		this.acl.mult(0);
 
 		this.p_system.position = this.loc.copy();
-		this.p_system.emit(ceil(player.health*3));
+		this.p_system.emit(ceil(player.health*4), 0.7);
 		this.p_system.update();
 	}
 
@@ -59,14 +59,14 @@ class Ball {
 		if (this.loc.copy().add(this.vel).x + xr < this.size/2 + wallr ||
 			xr - this.loc.copy().add(this.vel).x < this.size/2 + wallr   ) {
 			this.vel.x *= -wall_bounce;
-			camera.shake(4, 10);
+			// camera.shake(4, 10);
 		}
 
 		// if going to be at top or bottom bounce off that side
 		if (this.loc.copy().add(this.vel).y + yr < this.size/2 + wallr ||
 			yr - this.loc.copy().add(this.vel).y < this.size/2 + wallr   ) {
 			this.vel.y *= -wall_bounce;
-			camera.shake(4, 10);
+			// camera.shake(4, 10);
 		}
 	}
 
@@ -85,14 +85,32 @@ class Ball {
 		strokeWeight(this.k*100);
 		line(player.loc.x, player.loc.y, this.loc.x, this.loc.y);
 
-		fill(255, 140, 20, this.vel.mag()^2 / 4);
-		noStroke();
-		circle(this.loc.x, this.loc.y, this.size * 1.6);
+		// fill(255, 140, 20, this.vel.mag()^2 / 4);
+		// noStroke();
+		// circle(this.loc.x, this.loc.y, this.size * 1.6);
 
 		fill(255, 132, 10);
 		strokeWeight(4);
 		stroke(200, 100, 100);
 		circle(this.loc.x, this.loc.y, this.size);
+
+		// let glow = color(255, 190, 137, 255);
+		// let glow_size = 40;
+		// loadPixels();
+		// let d = pixelDensity();
+		// for (let i = 0; i < width*height; i++) {
+		// 	let x = i % width;
+		// 	let y = floor(i/width);
+		// 	let distance = this.loc.dist(createVector(x,y));
+
+		// 	if (distance <= glow_size) {
+		// 		let j = i * 4;
+		// 		pixels[j] = red(glow);
+		// 		pixels[j+1] = green(glow);
+		// 		pixels[j+2] = blue(glow);
+		// 		pixels[j+3] = alpha(glow) * (glow_size-distance)/glow_size;
+		// 	}
+		// }
 	}
 
 }
