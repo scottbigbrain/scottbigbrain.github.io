@@ -1,4 +1,5 @@
 // Game for the GMTK Game Jam 2021. Author: Elijah Buchanan
+// music from bensound.com
 
 let scaling = 1;
 let xr = 1000;
