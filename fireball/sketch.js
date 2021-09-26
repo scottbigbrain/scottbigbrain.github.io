@@ -34,7 +34,9 @@ function preload() {
 
 
 function setup() {
-	createCanvas(1000, 800);
+	let canvas = createCanvas(1000, 800);
+	canvas.center('horizontal');
+	canvas.style('outline', 'black 3px solid');
 	frameRate(30);
 
 	player = new Player();
