@@ -1,6 +1,8 @@
-html, body {
+html, body, .center {
 	margin: 0;
 	padding: 0;
+	/*width:  75%;*/
+	text-align: center;
 	background-color: rgb(69, 77, 91);
 }
 canvas {
